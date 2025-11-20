@@ -1,0 +1,5 @@
+这是数据预处理和 DataLoader 的代码。
+先运行 data/prepare_deepfashion_mm.py,来生成训练所需的 JSONL 标注文件。
+可以直接运行 demo_usage.py，我在里面写了如何初始化 DeepFashionMMDataModule
+以及如何获取 DataLoader 的示例。
+如果需要使用特定的 Tokenizer（比如 BERT 或 SentencePiece），可以在 demo 代码里切换配置。”
