@@ -14,6 +14,9 @@ image_captioning_project/
 │   ├── dataset.py                # 数据集加载
 │   └── vocabulary.py             # 词表管理
 │
+|—— dataset/                      # 📁 数据集存放
+|    ├── __init__.py
+|
 ├── models/                       # 🎯 核心模型
 │   ├── __init__.py
 │   ├── encoders/
