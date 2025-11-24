@@ -21,7 +21,10 @@ def deepfashion_collate_fn(batch: List[Dict[str, Any]]) -> Dict[str, Any]:
     if has_text:
         lengths = [tensor.shape[0] if tensor is not None else 0 for tensor in input_ids_list]
         max_len = max(lengths)
-        pad_token_id = 0
+        pad_token_id = next(
+            (sample.get("pad_token_id") for sample in batch if sample.get("pad_token_id") is not None),
+            0,
+        )
         input_ids = torch.full((len(batch), max_len), pad_token_id, dtype=torch.long)
         attention_mask = torch.zeros((len(batch), max_len), dtype=torch.long)
 

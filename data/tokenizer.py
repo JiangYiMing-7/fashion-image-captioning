@@ -11,7 +11,7 @@ from typing import Dict, Iterable, Optional
 
 import torch
 
-from datasets.text_utils import clean_caption
+from data.text_utils import clean_caption
 
 try:
     import sentencepiece as spm
@@ -63,6 +63,12 @@ class CaptionTokenizer:
             self.bos_token_id = int(self.tokenizer.bos_token_id) if self.tokenizer.bos_token_id is not None else None
             self.eos_token_id = int(self.tokenizer.eos_token_id) if self.tokenizer.eos_token_id is not None else None
 
+    @property
+    def vocab_size(self) -> int:
+        if self.backend == "spm":
+            return int(self.processor.get_piece_size())
+        return int(self.tokenizer.vocab_size)
+
     def encode(self, text: str) -> Dict[str, torch.Tensor]:
         """Tokenize a caption and return tensors."""
         normalized = clean_caption(text, lowercase=self.lowercase)
@@ -72,6 +78,9 @@ class CaptionTokenizer:
         if self.backend == "spm":
             token_ids = self.processor.encode(normalized, out_type=int)
             token_ids = self._apply_special_tokens(token_ids)
+            token_ids = token_ids[: self.max_len]
+            input_ids_tensor = torch.tensor(token_ids, dtype=torch.long)
+            attention_mask_tensor = torch.ones_like(input_ids_tensor, dtype=torch.long)
         else:
             encoded = self.tokenizer(
                 normalized,
@@ -80,14 +89,13 @@ class CaptionTokenizer:
                 padding=False,
                 add_special_tokens=True,
                 return_attention_mask=True,
-                return_tensors=None,
+                return_tensors="pt",
             )
-            token_ids = encoded["input_ids"]
+            input_ids_tensor = encoded["input_ids"].squeeze(0)
+            attention_mask_tensor = encoded["attention_mask"].squeeze(0)
 
-        token_ids = token_ids[: self.max_len]
-        attention_mask = [1] * len(token_ids)
-        input_ids_tensor = torch.tensor(token_ids, dtype=torch.long)
-        attention_mask_tensor = torch.tensor(attention_mask, dtype=torch.long)
+        input_ids_tensor = input_ids_tensor[: self.max_len]
+        attention_mask_tensor = attention_mask_tensor[: input_ids_tensor.shape[0]]
         return {"input_ids": input_ids_tensor, "attention_mask": attention_mask_tensor}
 
     def _apply_special_tokens(self, token_ids: Iterable[int]) -> list[int]:
@@ -137,13 +145,13 @@ def train_sentencepiece_model(
         spm.SentencePieceTrainer.train(
             sentence_iterator=_caption_iterator(train_jsonl, lowercase),
             model_prefix=str(tmp_prefix),
-        vocab_size=vocab_size,
-        character_coverage=character_coverage,
-        model_type=model_type,
-        pad_id=0,
-        bos_id=1,
-        eos_id=2,
-        unk_id=3,
+            vocab_size=vocab_size,
+            character_coverage=character_coverage,
+            model_type=model_type,
+            pad_id=0,
+            bos_id=1,
+            eos_id=2,
+            unk_id=3,
         )
         for suffix in (".model", ".vocab"):
             src = tmp_prefix.with_suffix(suffix)
@@ -157,8 +165,8 @@ def _parse_cli_args() -> argparse.Namespace:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     spm_parser = subparsers.add_parser("train_sentencepiece", help="Train a SentencePiece tokenizer.")
-    spm_parser.add_argument("--root", type=str, default="./data/DeepFashion-MultiModal")
-    spm_parser.add_argument("--output-dir", type=str, default="./data/DeepFashion-MultiModal/tokenizer")
+    spm_parser.add_argument("--root", type=str, default="./dataset")
+    spm_parser.add_argument("--output-dir", type=str, default="./dataset/tokenizer")
     spm_parser.add_argument("--vocab-size", type=int, default=8000)
     spm_parser.add_argument("--character-coverage", type=float, default=0.9995)
     spm_parser.add_argument("--model-type", type=str, default="unigram")

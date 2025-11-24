@@ -12,7 +12,7 @@ from torch.utils.data import Dataset
 from torchvision import transforms
 from torchvision.transforms.functional import InterpolationMode
 
-from datasets.tokenizer import CaptionTokenizer
+from data.tokenizer import CaptionTokenizer
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -99,6 +99,7 @@ class DeepFashionMMDataset(Dataset):
         tokenized = self.tokenizer.encode(caption) if self.tokenizer else None
         input_ids = tokenized["input_ids"] if tokenized else None
         attention_mask = tokenized["attention_mask"] if tokenized else None
+        pad_token_id = self.tokenizer.pad_token_id if self.tokenizer else None
 
         sample = {
             "image": image_tensor,
@@ -107,6 +108,7 @@ class DeepFashionMMDataset(Dataset):
             "caption": caption,
             "image_id": str(record.get("image_id", "")),
             "path": str(image_path),
+            "pad_token_id": pad_token_id,
         }
         return sample
 

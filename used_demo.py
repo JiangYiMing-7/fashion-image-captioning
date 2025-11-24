@@ -1,12 +1,12 @@
 import torch
 from pathlib import Path
-from datasets.tokenizer import CaptionTokenizer
-from datasets.datamodule import DeepFashionMMDataModule
+from data.tokenizer import CaptionTokenizer
+from data.datamodule import DeepFashionMMDataModule
 
 def main():
     # ================= 配置区域 =================
     # 数据集根目录 (请确保你已经运行过 prepare_deepfashion_mm.py 并生成了 processed/ 文件夹)
-    root_dir = "./data/DeepFashion-MultiModal"
+    root_dir = "./dataset"
     
     # 选择 Tokenizer (二选一)
     # 选项 A: 使用 HuggingFace 的 Tokenizer (如 BERT)
@@ -15,7 +15,7 @@ def main():
     
     # 选项 B: 使用训练的 SentencePiece 模型
     # tokenizer_name = None
-    # spm_model_path = "./data/DeepFashion-MultiModal/tokenizer/spm.model"
+    # spm_model_path = "./dataset/tokenizer/spm.model"
     # ===========================================
 
     print(f"Initializing Tokenizer...")

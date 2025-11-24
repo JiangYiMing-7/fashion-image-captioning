@@ -1,1 +1,4 @@
-.images/
+dataset/
+resources/
+.gitignore
+**/__pycache__/

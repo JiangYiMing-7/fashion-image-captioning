@@ -5,16 +5,15 @@ from dataclasses import dataclass, field
 
 @dataclass
 class CNNEncoderConfig:
-    image_size: int = 224
-    embed_dim: int = 256
+    embed_dim: int = 512
     pretrained: bool = True
     trainable_backbone: bool = False
 
 
 @dataclass
 class RNNDecoderConfig:
-    vocab_size: int = 1  # 训练脚本动态覆盖
-    embed_dim: int = 256
+    vocab_size: int = 1  # 运行时更新
+    embed_dim: int = 512
     hidden_dim: int = 512
     num_layers: int = 1
     dropout: float = 0.1

@@ -5,14 +5,20 @@ from __future__ import annotations
 import argparse
 from itertools import islice
 from typing import Optional
+from pathlib import Path
+import sys
 
-from datasets.datamodule import DeepFashionMMDataModule
-from datasets.tokenizer import CaptionTokenizer
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from data.datamodule import DeepFashionMMDataModule
+from data.tokenizer import CaptionTokenizer
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--root", type=str, default="./data/DeepFashion-MultiModal")
+    parser.add_argument("--root", type=str, default="./dataset")
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--num-workers", type=int, default=0)
     parser.add_argument("--image-size", type=int, default=384)

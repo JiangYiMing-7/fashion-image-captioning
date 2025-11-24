@@ -12,6 +12,6 @@ class CaptionCrossEntropyLoss(nn.Module):
     def forward(self, logits: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
         vocab_size = logits.size(-1)
         logits = logits.view(-1, vocab_size)
-        targets = targets.view(-1)
+        targets = targets.reshape(-1)
         return self.loss_fn(logits, targets)
 

@@ -8,19 +8,24 @@ import logging
 import os
 import random
 from pathlib import Path
+import sys
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
-from datasets.text_utils import clean_caption, split_sentences
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from data.text_utils import clean_caption, split_sentences
 
 LOGGER = logging.getLogger(__name__)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--root", type=str, default="./data/DeepFashion-MultiModal")
-    parser.add_argument("--image-dir", type=str, default="image")
-    parser.add_argument("--caption-file", type=str, default=None)
-    parser.add_argument("--caption-dir", type=str, default=None)
+    parser.add_argument("--root", type=str, default="dataset")
+    parser.add_argument("--image-dir", type=str, default="images")
+    parser.add_argument("--caption-file", type=str, default="textual_descriptions/captions.json")
+    parser.add_argument("--caption-dir", type=str, default="textual_descriptions")
     parser.add_argument("--train-ratio", type=float, default=0.8)
     parser.add_argument("--val-ratio", type=float, default=0.1)
     parser.add_argument("--test-ratio", type=float, default=0.1)

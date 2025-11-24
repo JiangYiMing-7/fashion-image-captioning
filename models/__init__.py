@@ -1,4 +1,4 @@
-from models.captioning_model import CaptioningModel
+from models.captioning_model import CaptioningModel, build_captioning_model
 
-__all__ = ["CaptioningModel"]
+__all__ = ["CaptioningModel", "build_captioning_model"]
 

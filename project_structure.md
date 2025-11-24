@@ -9,7 +9,7 @@ image_captioning_project/
 │   ├── model_configs.py          # 模型架构配置
 │   └── training_configs.py       # 训练参数配置
 │
-├── data/
+├── data/                         # 📁 数据集处理   
 │   ├── __init__.py
 │   ├── dataset.py                # 数据集加载
 │   └── vocabulary.py             # 词表管理

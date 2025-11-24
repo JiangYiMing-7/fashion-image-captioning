@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-from typing import Tuple
-
-import torch
 from torch import nn
 
 from configs.model_configs import RNNDecoderConfig
@@ -11,7 +8,6 @@ from configs.model_configs import RNNDecoderConfig
 class RNNDecoder(nn.Module):
     def __init__(self, config: RNNDecoderConfig) -> None:
         super().__init__()
-        self.config = config
         self.embedding = nn.Embedding(config.vocab_size, config.embed_dim)
         self.dropout = nn.Dropout(config.dropout)
         self.rnn = nn.LSTM(
@@ -23,11 +19,7 @@ class RNNDecoder(nn.Module):
         )
         self.fc = nn.Linear(config.hidden_dim, config.vocab_size)
 
-    def forward(
-        self,
-        captions: torch.Tensor,
-        hidden: Tuple[torch.Tensor, torch.Tensor] | None = None,
-    ) -> Tuple[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
+    def forward(self, captions, hidden):
         embeddings = self.dropout(self.embedding(captions))
         outputs, hidden = self.rnn(embeddings, hidden)
         logits = self.fc(outputs)

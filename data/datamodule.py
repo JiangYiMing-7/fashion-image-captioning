@@ -7,9 +7,9 @@ from typing import Optional
 
 from torch.utils.data import DataLoader
 
-from datasets.collate import deepfashion_collate_fn
-from datasets.deepfashion_mm_dataset import DeepFashionMMDataset
-from datasets.tokenizer import CaptionTokenizer
+from data.collate import deepfashion_collate_fn
+from data.deepfashion_mm_dataset import DeepFashionMMDataset
+from data.tokenizer import CaptionTokenizer
 
 
 class DeepFashionMMDataModule:
