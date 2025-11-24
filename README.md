@@ -91,3 +91,20 @@ Demo 会：
 - 使用 `train.jsonl`、`val.jsonl` 中的前 N 条记录
 - 构造独立 DataLoader，打印训练/验证损失
 - 训练完成后可在 `outputs/checkpoints/` 查看保存的权重（便于验证整个 pipeline 正常）
+
+## 推理：单张图片生成描述
+
+```bash
+python scripts/infer.py \
+  --checkpoint outputs/checkpoints/model_epoch1_val9.5388.pt \
+  --image dataset/images/MEN-Denim-id_00000089-01_7_additional.jpg \
+  --hf-name bert-base-uncased
+```
+
+脚本会自动加载 Tokenizer 和模型，输出类似：
+
+```
+生成描述：a man wears a long sleeve sweater with solid color patterns ...
+```
+
+若使用 SentencePiece 词表，将 `--hf-name` 留空并设置 `--spm-model` 即可。

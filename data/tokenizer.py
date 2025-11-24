@@ -106,6 +106,12 @@ class CaptionTokenizer:
             tokens.append(self.eos_token_id)
         return tokens
 
+    def decode(self, token_ids: Iterable[int]) -> str:
+        tokens = list(token_ids)
+        if self.backend == "spm":
+            return self.processor.decode(tokens).strip()
+        return self.tokenizer.decode(tokens, skip_special_tokens=True).strip()
+
 
 def _caption_iterator(train_jsonl: Path, lowercase: bool) -> Iterable[str]:
     with train_jsonl.open("r", encoding="utf-8") as f:
