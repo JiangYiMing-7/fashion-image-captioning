@@ -97,7 +97,7 @@ Demo 会：
 ```bash
 python scripts/infer.py \
   --checkpoint outputs/checkpoints/model_epoch1_val9.5388.pt \
-  --image dataset/images/MEN-Denim-id_00000089-01_7_additional.jpg \
+  --image dataset/images/MEN-Denim-id_00000080-01_7_additional.jpg \
   --hf-name bert-base-uncased
 ```
 

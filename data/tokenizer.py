@@ -144,6 +144,10 @@ def train_sentencepiece_model(
     output_dir.mkdir(parents=True, exist_ok=True)
     model_prefix = output_dir / "spm"
 
+    import tempfile
+    tempfile.tempdir = "./temp"  
+    Path("./temp").mkdir(exist_ok=True)
+
     # sentencepiece has trouble with non-ASCII paths on Windows.
     # Train in a temporary ASCII-safe directory then move the files back.
     with tempfile.TemporaryDirectory() as tmpdir:
