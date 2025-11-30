@@ -2,3 +2,5 @@ dataset/
 resources/
 .gitignore
 **/__pycache__/
+outputs/
+configs/

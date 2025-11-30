@@ -50,10 +50,23 @@ class CaptionGenerator:
         self.max_len = max_len
 
     @torch.no_grad()
-    def generate(self, image_path: str | Path, max_length: Optional[int] = None) -> str:
+    def generate(
+        self, 
+        image_path: str | Path, 
+        max_length: Optional[int] = None,
+        temperature: float = 1.0,
+        top_k: Optional[int] = 50,
+    ) -> str:
         image = Image.open(image_path).convert("RGB")
         tensor = self.transform(image).unsqueeze(0).to(self.device)
         length = max_length or self.max_len
-        token_ids = self.model.generate(tensor, self.start_token, self.end_token, length)
+        token_ids = self.model.generate(
+            tensor, 
+            self.start_token, 
+            self.end_token, 
+            length,
+            temperature=temperature,
+            top_k=top_k,
+        )
         return self.tokenizer.decode(token_ids.squeeze(0).tolist())
 

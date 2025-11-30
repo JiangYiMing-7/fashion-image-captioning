@@ -20,6 +20,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-len", type=int, default=32, help="生成的最大长度")
     parser.add_argument("--image-size", type=int, default=384, help="推理时的图像尺寸")
     parser.add_argument("--device", type=str, default=None, help="强制指定设备，如 cpu / cuda:0")
+    parser.add_argument("--temperature", type=float, default=1.0, help="采样温度，越高越随机，0表示贪婪解码")
+    parser.add_argument("--top-k", type=int, default=50, help="Top-k 采样，0表示不限制")
     return parser.parse_args()
 
 
@@ -33,7 +35,11 @@ def main() -> None:
         image_size=args.image_size,
         device=args.device,
     )
-    caption = generator.generate(args.image)
+    caption = generator.generate(
+        args.image, 
+        temperature=args.temperature,
+        top_k=args.top_k if args.top_k > 0 else None,
+    )
     print(f"生成描述：{caption}")
 
 
