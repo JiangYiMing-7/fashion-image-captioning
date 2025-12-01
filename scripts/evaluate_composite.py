@@ -2,12 +2,15 @@ import json
 import argparse
 from pathlib import Path
 import sys
-from pathlib import Path
+import os
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(ROOT))
 
 from inference.caption_generator import CaptionGenerator
 from evaluation.composite_metric import CompositeMetric
+
+os.environ['JAVA_TOOL_OPTIONS'] = '--add-opens java.base/java.lang=ALL-UNNAMED'
 
 
 def load_jsonl(path):
@@ -33,6 +36,8 @@ def parse_args():
                        choices=["BLEU", "METEOR", "ROUGE", "CIDEr", "SPICE"],
                        default=["BLEU", "METEOR", "ROUGE", "CIDEr", "SPICE"],
                        help="选择要计算的评估指标")
+    parser.add_argument("--temperature", type=float, default=1.0, help="采样温度,越高越随机,0表示贪婪解码")
+    parser.add_argument("--top-k", type=int, default=50, help="Top-k 采样,0表示不限制")
     return parser.parse_args()
 
 
@@ -63,7 +68,11 @@ def main():
 
         # 注意：这里可能需要根据实际路径调整
         full_img_path = f"dataset/{img_path}" if not img_path.startswith("dataset/") else img_path
-        hypothesis = generator.generate(full_img_path)
+        hypothesis = generator.generate(
+            full_img_path,
+            temperature=args.temperature,
+            top_k=args.top_k if args.top_k > 0 else None,
+        )
 
         refs.append(reference)
         hyps.append(hypothesis)

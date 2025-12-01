@@ -2,7 +2,7 @@ import json
 import argparse
 from pathlib import Path
 import sys
-from pathlib import Path
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(ROOT))
 
@@ -29,6 +29,8 @@ def parse_args():
     parser.add_argument("--hf-name", type=str, default="bert-base-uncased")
     parser.add_argument("--spm-model", type=str, default=None)
     parser.add_argument("--output", type=str, default="outputs/results/bleu_test.json")
+    parser.add_argument("--temperature", type=float, default=1.0, help="采样温度,越高越随机,0表示贪婪解码")
+    parser.add_argument("--top-k", type=int, default=50, help="Top-k 采样,0表示不限制")
     return parser.parse_args()
 
 
@@ -56,7 +58,11 @@ def main():
         img_path = item["image_path"]
         reference = item["caption"]
 
-        hypothesis = generator.generate('dataset/'+img_path)
+        hypothesis = generator.generate(
+            'dataset/'+img_path,
+            temperature=args.temperature,
+            top_k=args.top_k if args.top_k > 0 else None,
+        )
 
         refs.append(reference)
         hyps.append(hypothesis)
