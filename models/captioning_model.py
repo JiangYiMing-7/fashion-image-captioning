@@ -73,4 +73,3 @@ def build_captioning_model(config: CaptioningModelConfig, vocab_size: int) -> Ca
     decoder_cfg: RNNDecoderConfig = config.decoder
     decoder_cfg.vocab_size = vocab_size
     return CaptioningModel(config)
-

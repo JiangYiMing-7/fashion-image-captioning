@@ -69,4 +69,3 @@ class CaptionGenerator:
             top_k=top_k,
         )
         return self.tokenizer.decode(token_ids.squeeze(0).tolist())
-

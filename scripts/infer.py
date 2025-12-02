@@ -22,6 +22,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--device", type=str, default=None, help="强制指定设备，如 cpu / cuda:0")
     parser.add_argument("--temperature", type=float, default=1.0, help="采样温度，越高越随机，0表示贪婪解码")
     parser.add_argument("--top-k", type=int, default=50, help="Top-k 采样，0表示不限制")
+    parser.add_argument("--temperature", type=float, default=1.0, help="采样温度,越高越随机,0表示贪婪解码")
+    parser.add_argument("--top-k", type=int, default=50, help="Top-k 采样,0表示不限制")
     return parser.parse_args()
 
 
@@ -45,4 +47,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
