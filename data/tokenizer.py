@@ -177,7 +177,7 @@ def _parse_cli_args() -> argparse.Namespace:
     spm_parser = subparsers.add_parser("train_sentencepiece", help="Train a SentencePiece tokenizer.")
     spm_parser.add_argument("--root", type=str, default="./dataset")
     spm_parser.add_argument("--output-dir", type=str, default="./dataset/tokenizer")
-    spm_parser.add_argument("--vocab-size", type=int, default=8000)
+    spm_parser.add_argument("--vocab-size", type=int, default=1000)
     spm_parser.add_argument("--character-coverage", type=float, default=0.9995)
     spm_parser.add_argument("--model-type", type=str, default="unigram")
     spm_parser.add_argument("--lowercase", action="store_true", dest="lowercase")

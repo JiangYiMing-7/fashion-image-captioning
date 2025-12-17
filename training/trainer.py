@@ -40,7 +40,7 @@ class Trainer:
 
             self.optimizer.zero_grad()
             logits = self.model(images, inputs)
-            loss = self.criterion(logits, targets)
+            loss = self.criterion(logits, targets[:, 1:])
             loss.backward()
             torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.grad_clip)
             self.optimizer.step()
