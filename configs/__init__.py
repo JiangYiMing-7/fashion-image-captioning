@@ -6,6 +6,9 @@ from configs.model_configs import (
     ViTEncoderConfig,
     TransformerDecoderConfig,
     ViTTransformerModelConfig,
+    AttentionCNNEncoderConfig,
+    AttentionRNNDecoderConfig,
+    AttentionCaptioningModelConfig,
 )
 from configs.training_configs import TrainingConfig
 
@@ -18,4 +21,7 @@ __all__ = [
     "ViTEncoderConfig",
     "TransformerDecoderConfig",
     "ViTTransformerModelConfig",
+    "AttentionCNNEncoderConfig",
+    "AttentionRNNDecoderConfig",
+    "AttentionCaptioningModelConfig",
 ]
